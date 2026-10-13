@@ -1,4 +1,5 @@
 package com.example.therionlabs_spa.ui.navigation
 
-sealed class AppNavigation {
+sealed class Screen() {
+
 }
