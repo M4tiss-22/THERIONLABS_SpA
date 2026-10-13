@@ -1,5 +1,6 @@
 package com.example.therionlabs_spa.ui.viewmodel
 
+
 object ValidationUtils {
     fun validarNombre(nombre: String): String? {
         return when {
