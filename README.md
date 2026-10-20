@@ -54,7 +54,11 @@ therionlabs_spa/
     ├── CameraManager.kt
     └── NetworkMonitor.kt
 
-
+```
+```text
+Link Trello:
+https://app.clickup.com/90171605378/v/li/901717914944
+```
 ⚙️ Configuración y Ejecución
 
 Clonar el repositorio:
@@ -72,8 +76,10 @@ Sincronizar y Compilar:
 Ejecutar un Sync Project with Gradle Files.
 Ejecutar en un emulador con API 33+ (ej. Pixel 8 con Android 14/15).
 
+```text
 👤 Autores
 Matias Iturrieta — Ingenieria en Informatica
 Dalexandro Castillo - Ingenieria en Informatica
 Emerson Marchant -  Ingenieria en Informatica
 Institución: Duoc UC · Escuela de Informática y Telecomunicaciones
+```
