@@ -25,6 +25,7 @@ Ciclo de vida y Estado: AndroidX Lifecycle ViewModel Compose, StateFlow y Corrut
 
 📂 Estructura del Proyecto
 
+
 com.example.therionlabs_spa/
 ├── data/
 │   ├── local/
