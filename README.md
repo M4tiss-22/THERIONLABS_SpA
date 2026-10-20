@@ -23,10 +23,10 @@ Base de Datos: Room (v2.6.1)
 Navegación: Jetpack Navigation Compose
 Ciclo de vida y Estado: AndroidX Lifecycle ViewModel Compose, StateFlow y Corrutinas
 
-📂 Estructura del Proyecto
+### 📁 Estructura del Proyecto
 
-
-com.example.therionlabs_spa/
+```text
+therionlabs_spa/
 ├── data/
 │   ├── local/
 │   │   ├── AppDatabase.kt
