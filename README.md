@@ -8,11 +8,11 @@ Los ejecutivos en terreno suelen enfrentar dificultades para recopilar informaci
 🚀 Características Principales
 
 Arquitectura MVVM limpia: Separación estricta de responsabilidades entre la UI reactiva, los ViewModels con flujos StateFlow y la capa de repositorio.
-Persistencia local con Room: Almacenamiento SQLite mediante LeadDatabase, LeadDao y LeadEntity, gestionando el estado de sincronización (estaSincronizado = false) para subidas posteriores.
+Persistencia local con Room: Almacenamiento SQLite mediante LeadDatabase, LeadDao y LeadEntity, gestionando el estado de sincronización para subidas posteriores.
 Monitoreo de Red Reactivo: Integración de NetworkMonitor con ConnectivityManager que informa en vivo si el dispositivo está en línea o guardando en búfer local.
-Validaciones en tiempo real: Verificación de campos obligatorios con expresiones regulares (nombres con longitud mínima, email estándar y teléfonos de 9 dígitos chilenos).
-Acceso a Cámara Nativa: Captura instantánea de fotografías de respaldo (credenciales/documentos) y preview en miniatura antes de guardar.
-Diseño Corporativo e Institucional: Interfaz moderna en Modo Oscuro con los colores corporativos de Duoc UC (Azul Marino #0F172A, Amarillo/Oro #FFAE00 y Esmeralda #10B981).
+Validaciones en tiempo real: Verificación de campos obligatorios con expresiones regulares.
+Acceso a Cámara Nativa: Captura instantánea de fotografías de respaldo y preview en miniatura antes de guardar.
+Diseño Corporativo e Institucional: Interfaz moderna en Modo Oscuro con los colores corporativos de Duoc UC.
 
 🛠️ Tecnologías y Librerías
 
