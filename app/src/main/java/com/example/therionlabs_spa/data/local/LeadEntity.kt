@@ -3,7 +3,6 @@ package com.example.therionlabs_spa.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 @Entity(tableName = "Prospectos")
 data class LeadEntity(
     @PrimaryKey(autoGenerate = true)
