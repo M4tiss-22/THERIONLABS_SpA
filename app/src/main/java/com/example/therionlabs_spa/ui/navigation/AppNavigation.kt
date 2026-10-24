@@ -24,7 +24,7 @@ fun AppNavigation(viewModel: LeadFormViewModel) {
         composable(Screen.Formulario.ruta) {
             LeadFormScreen(
                 viewModel = viewModel,
-                irALista = {
+                onNavigateToLista = {
                     controladorNavegacion.navigate(Screen.Listado.ruta)
                 }
             )

@@ -2,10 +2,19 @@ package com.example.therionlabs_spa.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Paleta Dark Pro & Duoc UC
+val DuocNavyDark = Color(0xFF0F172A)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val DuocCardSurface = Color(0xFF1E293B)
+
+val DuocYellow = Color(0xFFFFAE00)
+
+val DuocBlueAccent = Color(0xFF0284C7)
+
+val NeonGreen = Color(0xFF10B981)
+
+val TextLight = Color(0xFFF8FAFC)
+
+val TextMuted = Color(0xFF94A3B8)
+
+val BorderSubtle = Color(0xFF334155)
