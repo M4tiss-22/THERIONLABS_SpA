@@ -9,12 +9,12 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class NetworkMonitor(contexto: Context) {
+class NetworkMonitor(contexto: Context) : EstadoRed {
 
     private val administradorConexion =
         contexto.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    val estaConectado: Flow<Boolean> = callbackFlow {
+    override val estaConectado: Flow<Boolean> = callbackFlow {
         val respuestaRed = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(red: Network) {
                 trySend(true)
