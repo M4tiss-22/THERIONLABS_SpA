@@ -1,9 +1,7 @@
 package com.example.therionlabs_spa.ui.viewmodel
 
 
-import android.app.Notification
 import android.graphics.Bitmap
-import androidx.compose.ui.layout.AlignmentLine
 
 data class LeadFormUiState(
 
@@ -28,5 +26,6 @@ data class LeadFormUiState(
     val formularioValido: Boolean = false,
     val estaGuardando: Boolean = false,
     val estaEnLinea: Boolean = false,
+    val estaSincronizando: Boolean = false,
     val mensajeNotificacion: String? = null
 )

@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.therionlabs_spa.data.local.LeadEntity
 import com.example.therionlabs_spa.data.repository.LeadRepository
-import com.example.therionlabs_spa.util.NetworkMonitor
+import com.example.therionlabs_spa.data.repository.ResultadoSincronizacion
+import com.example.therionlabs_spa.util.EstadoRed
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class LeadFormViewModel(
     private val repositorio: LeadRepository,
-    private val monitorRed: NetworkMonitor
+    private val monitorRed: EstadoRed
 ) : ViewModel() {
 
     private val _estadoUi = MutableStateFlow(LeadFormUiState())
@@ -26,8 +27,10 @@ class LeadFormViewModel(
 
     init {
         viewModelScope.launch {
-            monitorRed.estaConectado.collect { conectado ->
+            monitorRed.estaConectado.distinctUntilChanged().collect { conectado ->
                 _estadoUi.update { it.copy(estaEnLinea = conectado) }
+                // Al recuperar conexión se envían en segundo plano los prospectos pendientes.
+                if (conectado) sincronizarProspectos(mostrarResultado = false)
             }
         }
     }
@@ -102,10 +105,13 @@ class LeadFormViewModel(
             if (guardadoExitoso) {
                 _estadoUi.update {
                     LeadFormUiState(
-                        estaEnLinea = actual.estaEnLinea,
+                        estaEnLinea = it.estaEnLinea,
+                        estaSincronizando = it.estaSincronizando,
                         mensajeNotificacion = "¡Prospecto guardado exitosamente en base local!"
                     )
                 }
+                // Con conexión se intenta enviar de inmediato; sin ella queda pendiente.
+                if (_estadoUi.value.estaEnLinea) sincronizarProspectos(mostrarResultado = false)
             } else {
                 _estadoUi.update {
                     it.copy(
@@ -121,9 +127,31 @@ class LeadFormViewModel(
         _estadoUi.update { it.copy(mensajeNotificacion = null) }
     }
 
-    fun sincronizarProspectos() {
+    /**
+     * Envía al backend los prospectos pendientes. Si ya hay una sincronización en curso no lanza otra.
+     * [mostrarResultado] = false para los envíos automáticos (no molestan al usuario con avisos).
+     */
+    fun sincronizarProspectos(mostrarResultado: Boolean = true) {
+        if (_estadoUi.value.estaSincronizando) return
+        _estadoUi.update { it.copy(estaSincronizando = true) }
+
         viewModelScope.launch {
-            repositorio.sincronizarProspectos()
+            val resultado = repositorio.sincronizarProspectos()
+            val mensaje = if (mostrarResultado) mensajeDeSincronizacion(resultado) else null
+            _estadoUi.update {
+                it.copy(
+                    estaSincronizando = false,
+                    mensajeNotificacion = mensaje ?: it.mensajeNotificacion
+                )
+            }
         }
+    }
+
+    private fun mensajeDeSincronizacion(resultado: ResultadoSincronizacion): String = when {
+        resultado.enviados == 0 && resultado.fallidos == 0 ->
+            "No hay prospectos pendientes por sincronizar"
+        resultado.fallidos > 0 ->
+            "Sincronizados ${resultado.enviados}; ${resultado.fallidos} siguen pendientes (revisa tu conexión)"
+        else -> "${resultado.enviados} prospecto(s) sincronizado(s) con el servidor"
     }
 }

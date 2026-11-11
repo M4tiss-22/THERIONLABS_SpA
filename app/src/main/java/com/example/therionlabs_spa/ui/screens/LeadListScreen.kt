@@ -34,10 +34,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,9 +68,20 @@ fun LeadListScreen(
     alRegresar: () -> Unit
 ) {
     val prospectos by viewModel.listaProspectos.collectAsState(initial = emptyList())
+    val estado by viewModel.estadoUi.collectAsState()
+    val estadoNotificacion = remember { SnackbarHostState() }
+
+    // Muestra el resultado de la sincronización con el servidor (éxito, pendientes o sin conexión).
+    LaunchedEffect(estado.mensajeNotificacion) {
+        estado.mensajeNotificacion?.let { mensaje ->
+            estadoNotificacion.showSnackbar(mensaje)
+            viewModel.limpiarNotificacion()
+        }
+    }
 
     Scaffold(
         containerColor = DuocNavyDark,
+        snackbarHost = { SnackbarHost(estadoNotificacion) },
         topBar = {
             Row(
                 modifier = Modifier
@@ -271,6 +286,7 @@ fun LeadListScreen(
             if (prospectos.isNotEmpty()) {
                 Button(
                     onClick = { viewModel.sincronizarProspectos() },
+                    enabled = !estado.estaSincronizando,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(),
@@ -298,7 +314,7 @@ fun LeadListScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Sincronizar Datos",
+                                text = if (estado.estaSincronizando) "Sincronizando..." else "Sincronizar Datos",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = TextLight
