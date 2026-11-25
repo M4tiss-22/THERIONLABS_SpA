@@ -71,7 +71,6 @@ fun LeadListScreen(
     val estado by viewModel.estadoUi.collectAsState()
     val estadoNotificacion = remember { SnackbarHostState() }
 
-    // Muestra el resultado de la sincronización con el servidor (éxito, pendientes o sin conexión).
     LaunchedEffect(estado.mensajeNotificacion) {
         estado.mensajeNotificacion?.let { mensaje ->
             estadoNotificacion.showSnackbar(mensaje)

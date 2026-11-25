@@ -29,7 +29,6 @@ class LeadFormViewModel(
         viewModelScope.launch {
             monitorRed.estaConectado.distinctUntilChanged().collect { conectado ->
                 _estadoUi.update { it.copy(estaEnLinea = conectado) }
-                // Al recuperar conexión se envían en segundo plano los prospectos pendientes.
                 if (conectado) sincronizarProspectos(mostrarResultado = false)
             }
         }
@@ -64,6 +63,18 @@ class LeadFormViewModel(
 
     fun onCursoSeleccionado(nuevoCurso: String) {
         _estadoUi.update { it.copy(cursoInteres = nuevoCurso) }
+    }
+
+    fun onNivelEducacionSeleccionado(nuevoNivel: String) {
+        _estadoUi.update { it.copy(nivelEducacion = nuevoNivel) }
+    }
+
+    fun onModalidadSeleccionada(nuevaModalidad: String) {
+        _estadoUi.update { it.copy(modalidad = nuevaModalidad) }
+    }
+
+    fun onCanalContactoSeleccionado(nuevoCanal: String) {
+        _estadoUi.update { it.copy(canalContacto = nuevoCanal) }
     }
 
     fun onObservacionesCambiadas(texto: String) {
@@ -110,7 +121,6 @@ class LeadFormViewModel(
                         mensajeNotificacion = "¡Prospecto guardado exitosamente en base local!"
                     )
                 }
-                // Con conexión se intenta enviar de inmediato; sin ella queda pendiente.
                 if (_estadoUi.value.estaEnLinea) sincronizarProspectos(mostrarResultado = false)
             } else {
                 _estadoUi.update {
@@ -127,10 +137,6 @@ class LeadFormViewModel(
         _estadoUi.update { it.copy(mensajeNotificacion = null) }
     }
 
-    /**
-     * Envía al backend los prospectos pendientes. Si ya hay una sincronización en curso no lanza otra.
-     * [mostrarResultado] = false para los envíos automáticos (no molestan al usuario con avisos).
-     */
     fun sincronizarProspectos(mostrarResultado: Boolean = true) {
         if (_estadoUi.value.estaSincronizando) return
         _estadoUi.update { it.copy(estaSincronizando = true) }

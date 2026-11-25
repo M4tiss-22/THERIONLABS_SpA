@@ -6,7 +6,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-// Credenciales de firma: viven en keystore.properties (en la raíz, NO se sube a Git).
+
 val propiedadesKeystore = Properties().apply {
     val archivo = rootProject.file("keystore.properties")
     if (archivo.exists()) archivo.inputStream().use { load(it) }
@@ -27,9 +27,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // URL base del backend remoto. 10.0.2.2 es el "localhost" de tu PC visto desde el emulador.
-        // Para un teléfono físico usa la IP de tu PC en la red (ej. http://192.168.1.50:8080/) o la URL pública (https).
-        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8080/\"")
+
+        buildConfigField("String", "API_BASE_URL", "\"http://localhost:8080/\"")
     }
 
     signingConfigs {
@@ -48,7 +47,7 @@ android {
             optimization {
                 enable = false
             }
-            // Solo firma si existe keystore.properties; así el proyecto sigue compilando en otros equipos.
+
             if (propiedadesKeystore.isNotEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
             }
@@ -72,7 +71,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Consumo de API remota (Retrofit + OkHttp + Gson)
+
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")

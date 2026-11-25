@@ -30,8 +30,6 @@ import org.junit.Test
 import retrofit2.Response
 import java.io.IOException
 
-// ---------- Dobles de prueba (sin Android, sin red, sin base real) ----------
-
 private class FakeLeadDao : LeadDao {
     val prospectos = MutableStateFlow<List<LeadEntity>>(emptyList())
     var fallarAlInsertar = false
@@ -79,8 +77,6 @@ private class FakeRed(inicial: Boolean) : EstadoRed {
     override val estaConectado: Flow<Boolean> = conectado
 }
 
-// ---------- Pruebas ----------
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class LeadFormViewModelTest {
 
@@ -110,8 +106,6 @@ class LeadFormViewModelTest {
         onTelefonoCambiado("912345678")
     }
 
-    // ----- estado inicial y red -----
-
     @Test
     fun estadoInicial_esFormularioVacioSinConexion() {
         val estado = crearViewModel().estadoUi.value
@@ -135,8 +129,6 @@ class LeadFormViewModelTest {
         red.conectado.value = false
         assertFalse(vm.estadoUi.value.estaEnLinea)
     }
-
-    // ----- validación de campos -----
 
     @Test
     fun nombreInvalido_muestraErrorYFormularioInvalido() {
@@ -231,8 +223,6 @@ class LeadFormViewModelTest {
         assertNull(vm.estadoUi.value.fotoCapturada)
     }
 
-    // ----- guardado local -----
-
     @Test
     fun guardar_conFormularioInvalido_noInsertaNada() {
         val vm = crearViewModel()
@@ -276,7 +266,6 @@ class LeadFormViewModelTest {
         assertEquals(1, api.recibidos.size)
         assertEquals("juan@duocuc.cl", api.recibidos[0].email)
         assertTrue(dao.prospectos.value[0].estaSincronizado)
-        // El envío automático no pisa el aviso de "guardado".
         assertEquals("¡Prospecto guardado exitosamente en base local!", vm.estadoUi.value.mensajeNotificacion)
     }
 
@@ -306,8 +295,6 @@ class LeadFormViewModelTest {
 
         assertNull(vm.estadoUi.value.mensajeNotificacion)
     }
-
-    // ----- sincronización con el backend -----
 
     @Test
     fun sincronizar_sinPendientes_avisaQueNoHayNada() {
@@ -378,7 +365,7 @@ class LeadFormViewModelTest {
 
         vm.sincronizarProspectos()
         assertTrue(vm.estadoUi.value.estaSincronizando)
-        vm.sincronizarProspectos() // se ignora: ya hay una en curso
+        vm.sincronizarProspectos()
         api.compuerta!!.complete(Unit)
 
         assertEquals(1, api.recibidos.size)
@@ -398,8 +385,6 @@ class LeadFormViewModelTest {
         assertTrue(dao.prospectos.value[0].estaSincronizado)
         assertTrue(vm.estadoUi.value.estaEnLinea)
     }
-
-    // ----- flujos expuestos a la UI -----
 
     @Test
     fun listaYPendientes_reflejanLaBaseLocal() = runTest {

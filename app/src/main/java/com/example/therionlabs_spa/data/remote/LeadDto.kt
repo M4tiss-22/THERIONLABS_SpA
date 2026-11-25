@@ -2,10 +2,7 @@ package com.example.therionlabs_spa.data.remote
 
 import com.example.therionlabs_spa.data.local.LeadEntity
 
-/**
- * Cuerpo JSON que se envía al backend remoto (POST /api/leads).
- * `idLocal` permite al backend detectar duplicados si un reintento llega dos veces.
- */
+
 data class LeadDto(
     val idLocal: Long,
     val nombre: String,

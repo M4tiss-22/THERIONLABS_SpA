@@ -2,7 +2,6 @@ package com.example.therionlabs_spa.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Paleta Dark Pro & Duoc UC
 val DuocNavyDark = Color(0xFF0F172A)
 
 val DuocCardSurface = Color(0xFF1E293B)

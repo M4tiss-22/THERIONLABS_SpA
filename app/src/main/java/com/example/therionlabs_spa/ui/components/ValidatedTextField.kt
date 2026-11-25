@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Colores Duoc Dark
 private val DuocCardSurface = Color(0xFF1E293B)
 private val DuocYellow = Color(0xFFFFAE00)
 private val TextLight = Color(0xFFF8FAFC)

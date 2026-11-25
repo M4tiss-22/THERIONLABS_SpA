@@ -10,6 +10,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
@@ -41,6 +44,8 @@ import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -280,22 +285,55 @@ fun LeadFormScreen(
                 opcionesTeclado = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
 
-            OutlinedTextField(
-                value = uiState.cursoInteres,
-                onValueChange = { viewModel.onCursoSeleccionado(it) },
-                readOnly = true,
-                label = { Text("Curso / Especialización", color = TextMuted) },
-                leadingIcon = { Icon(Icons.Default.School, contentDescription = null, tint = DuocYellow) },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = DuocCardSurface,
-                    unfocusedContainerColor = DuocCardSurface,
-                    unfocusedBorderColor = BorderSubtle,
-                    focusedBorderColor = DuocYellow,
-                    focusedTextColor = TextLight,
-                    unfocusedTextColor = TextLight
-                )
+            FormDropdownField(
+                label = "Nivel de Educación",
+                selectedValue = uiState.nivelEducacion,
+                options = listOf(
+                    "Técnico Profesional",
+                    "Enseñanza Media",
+                    "Universitario Incompleto",
+                    "Universitario Titulado"
+                ),
+                leadingIcon = Icons.Default.School,
+                onOptionSelected = { viewModel.onNivelEducacionSeleccionado(it) }
+            )
+
+            FormDropdownField(
+                label = "Curso / Especialización",
+                selectedValue = uiState.cursoInteres,
+                options = listOf(
+                    "Ingeniería en informatica",
+                    "Desarrollo de Aplicaciones Móviles",
+                    "Analista Programador",
+                    "Ciberseguridad y Redes",
+                    "Ingeniería en Conectividad y Redes"
+                ),
+                leadingIcon = Icons.Default.School,
+                onOptionSelected = { viewModel.onCursoSeleccionado(it) }
+            )
+
+            FormDropdownField(
+                label = "Modalidad Preferida",
+                selectedValue = uiState.modalidad,
+                options = listOf(
+                    "Online",
+                    "Presencial",
+                    "Semipresencial"
+                ),
+                leadingIcon = Icons.Default.School,
+                onOptionSelected = { viewModel.onModalidadSeleccionada(it) }
+            )
+
+            FormDropdownField(
+                label = "Canal de Contacto Preferido",
+                selectedValue = uiState.canalContacto,
+                options = listOf(
+                    "WhatsApp",
+                    "Llamada Telefónica",
+                    "Correo Electrónico"
+                ),
+                leadingIcon = Icons.Default.Phone,
+                onOptionSelected = { viewModel.onCanalContactoSeleccionado(it) }
             )
 
             ValidatedTextField(
@@ -387,6 +425,75 @@ fun LeadFormScreen(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun FormDropdownField(
+    label: String,
+    selectedValue: String,
+    options: List<String>,
+    leadingIcon: androidx.compose.ui.graphics.vector.ImageVector,
+    onOptionSelected: (String) -> Unit
+) {
+    var expandido by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            value = selectedValue,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(label, color = TextMuted) },
+            leadingIcon = { Icon(leadingIcon, contentDescription = null, tint = DuocYellow) },
+            trailingIcon = {
+                Icon(
+                    imageVector = if (expandido) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                    contentDescription = "Desplegar opciones",
+                    tint = DuocYellow
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = DuocCardSurface,
+                unfocusedContainerColor = DuocCardSurface,
+                unfocusedBorderColor = BorderSubtle,
+                focusedBorderColor = DuocYellow,
+                focusedTextColor = TextLight,
+                unfocusedTextColor = TextLight
+            )
+        )
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clickable { expandido = !expandido }
+        )
+
+        DropdownMenu(
+            expanded = expandido,
+            onDismissRequest = { expandido = false },
+            modifier = Modifier
+                .background(DuocCardSurface)
+                .border(1.dp, BorderSubtle, RoundedCornerShape(12.dp))
+        ) {
+            options.forEach { opcion ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = opcion,
+                            color = if (opcion == selectedValue) DuocYellow else TextLight,
+                            fontWeight = if (opcion == selectedValue) FontWeight.Bold else FontWeight.Normal,
+                            fontSize = 14.sp
+                        )
+                    },
+                    onClick = {
+                        onOptionSelected(opcion)
+                        expandido = false
+                    }
+                )
+            }
         }
     }
 }
