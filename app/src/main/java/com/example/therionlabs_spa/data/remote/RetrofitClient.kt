@@ -9,9 +9,12 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
+
+    private const val BASE_URL = "http://10.0.2.2:8080/"
+
     val api: LeadApiService by lazy {
         val registro = HttpLoggingInterceptor().apply {
-            // Solo se registra el cuerpo en debug: en release iría información personal de los prospectos.
+
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
             else HttpLoggingInterceptor.Level.NONE
         }

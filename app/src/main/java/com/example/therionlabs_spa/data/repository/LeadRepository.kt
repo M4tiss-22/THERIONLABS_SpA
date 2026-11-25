@@ -7,14 +7,9 @@ import com.example.therionlabs_spa.data.remote.toDto
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 
-/** Resultado de un intento de sincronización: cuántos prospectos llegaron y cuántos quedaron pendientes. */
 data class ResultadoSincronizacion(val enviados: Int, val fallidos: Int)
 
-/**
- * Local (Room): captura, cola de pendientes y listado. Es la fuente de verdad en terreno.
- * Remoto (API): recepción final de los prospectos. Un prospecto solo se marca como
- * sincronizado cuando el backend responde 2xx; si falla, queda pendiente para reintentar.
- */
+
 class LeadRepository(
     private val dao: LeadDao,
     private val api: LeadApiService
@@ -48,7 +43,7 @@ class LeadRepository(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                // Sin red, timeout o error de parseo: el prospecto sigue pendiente.
+
                 fallidos++
             }
         }
