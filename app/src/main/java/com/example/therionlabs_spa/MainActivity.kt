@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import com.example.therionlabs_spa.data.local.AppDatabase
+import com.example.therionlabs_spa.data.remote.RetrofitClient
 import com.example.therionlabs_spa.data.repository.LeadRepository
 import com.example.therionlabs_spa.ui.navigation.AppNavigation
 import com.example.therionlabs_spa.ui.viewmodel.LeadFormViewModel
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val baseDatos = AppDatabase.obtenerInstancia(applicationContext)
-        val repositorio = LeadRepository(baseDatos.leadDao())
+        val repositorio = LeadRepository(baseDatos.leadDao(), RetrofitClient.api)
         val monitorRed = NetworkMonitor(applicationContext)
         val viewModel = LeadFormViewModel(repositorio, monitorRed)
 

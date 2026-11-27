@@ -57,7 +57,7 @@ therionlabs_spa/
 ```
 ```text
 Link Trello:
-https://app.clickup.com/90171605378/v/li/901717914944
+(https://trello.com/b/G7NoyR1j/therionlabs-spa-gestion-de-leads)
 ```
 ⚙️ Configuración y Ejecución
 
