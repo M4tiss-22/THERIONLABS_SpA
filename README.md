@@ -62,7 +62,7 @@ https://app.clickup.com/90171605378/v/li/901717914944
 ⚙️ Configuración y Ejecución
 
 Clonar el repositorio:
-git clone https://github.com/tu-usuario/THERIONLABS_SpA.git
+git clone https://trello.com/b/G7NoyR1j/therionlabs-spa-gestion-de-leads
 
 Abrir en Android Studio: Abrir la carpeta raíz como proyecto de Gradle existente.
 
