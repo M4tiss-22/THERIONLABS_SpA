@@ -70,76 +70,76 @@ class LeadFormViewModel(
     }
 
     fun onModalidadSeleccionada(nuevaModalidad: String) {
-        _estadoUi.update { it.copy(modalidad = nuevaModalidad) }
-    }
+            _estadoUi.update { it.copy(modalidad = nuevaModalidad) }
+        }
 
-    fun onCanalContactoSeleccionado(nuevoCanal: String) {
-        _estadoUi.update { it.copy(canalContacto = nuevoCanal) }
-    }
+        fun onCanalContactoSeleccionado(nuevoCanal: String) {
+            _estadoUi.update { it.copy(canalContacto = nuevoCanal) }
+        }
 
-    fun onObservacionesCambiadas(texto: String) {
-        _estadoUi.update { it.copy(observaciones = texto) }
-    }
+        fun onObservacionesCambiadas(texto: String) {
+            _estadoUi.update { it.copy(observaciones = texto) }
+        }
 
-    fun onFotoCapturada(foto: Bitmap?) {
-        _estadoUi.update { it.copy(fotoCapturada = foto) }
-    }
+        fun onFotoCapturada(foto: Bitmap?) {
+            _estadoUi.update { it.copy(fotoCapturada = foto) }
+        }
 
-    private fun verificarValidezFormulario() {
-        val actual = _estadoUi.value
-        val esValido = actual.errorNombre == null && actual.nombre.isNotBlank() &&
-                actual.errorEmail == null && actual.email.isNotBlank() &&
-                actual.errorTelefono == null && actual.telefono.isNotBlank()
-        _estadoUi.update { it.copy(formularioValido = esValido) }
-    }
-
-    fun guardarProspecto() {
-        if (!_estadoUi.value.formularioValido) return
-
-        viewModelScope.launch {
-            _estadoUi.update { it.copy(estaGuardando = true) }
+        private fun verificarValidezFormulario() {
             val actual = _estadoUi.value
+            val esValido = actual.errorNombre == null && actual.nombre.isNotBlank() &&
+                    actual.errorEmail == null && actual.email.isNotBlank() &&
+                    actual.errorTelefono == null && actual.telefono.isNotBlank()
+            _estadoUi.update { it.copy(formularioValido = esValido) }
+        }
 
-            val nuevoProspecto = LeadEntity(
-                nombre = actual.nombre.trim(),
-                email = actual.email.trim(),
-                telefono = actual.telefono.trim(),
-                nivelEducacion = actual.nivelEducacion,
-                cursoInteres = actual.cursoInteres,
-                modalidad = actual.modalidad,
-                canalContacto = actual.canalContacto,
-                observaciones = actual.observaciones.trim(),
-                estaSincronizado = false
-            )
+        fun guardarProspecto() {
+            if (!_estadoUi.value.formularioValido) return
 
-            val guardadoExitoso = repositorio.guardarProspecto(nuevoProspecto)
-            if (guardadoExitoso) {
-                _estadoUi.update {
-                    LeadFormUiState(
-                        estaEnLinea = it.estaEnLinea,
-                        estaSincronizando = it.estaSincronizando,
-                        mensajeNotificacion = "¡Prospecto guardado exitosamente en base local!"
-                    )
-                }
-                if (_estadoUi.value.estaEnLinea) sincronizarProspectos(mostrarResultado = false)
-            } else {
-                _estadoUi.update {
-                    it.copy(
-                        estaGuardando = false,
-                        mensajeNotificacion = "Error al guardar el prospecto en base local"
-                    )
+            viewModelScope.launch {
+                _estadoUi.update { it.copy(estaGuardando = true) }
+                val actual = _estadoUi.value
+
+                val nuevoProspecto = LeadEntity(
+                    nombre = actual.nombre.trim(),
+                    email = actual.email.trim(),
+                    telefono = actual.telefono.trim(),
+                    nivelEducacion = actual.nivelEducacion,
+                    cursoInteres = actual.cursoInteres,
+                    modalidad = actual.modalidad,
+                    canalContacto = actual.canalContacto,
+                    observaciones = actual.observaciones.trim(),
+                    estaSincronizado = false
+                )
+
+                val guardadoExitoso = repositorio.guardarProspecto(nuevoProspecto)
+                if (guardadoExitoso) {
+                    _estadoUi.update {
+                        LeadFormUiState(
+                            estaEnLinea = it.estaEnLinea,
+                            estaSincronizando = it.estaSincronizando,
+                            mensajeNotificacion = "¡Prospecto guardado exitosamente en base local!"
+                        )
+                    }
+                    if (_estadoUi.value.estaEnLinea) sincronizarProspectos(mostrarResultado = false)
+                } else {
+                    _estadoUi.update {
+                        it.copy(
+                            estaGuardando = false,
+                            mensajeNotificacion = "Error al guardar el prospecto en base local"
+                        )
+                    }
                 }
             }
         }
-    }
 
-    fun limpiarNotificacion() {
-        _estadoUi.update { it.copy(mensajeNotificacion = null) }
-    }
+        fun limpiarNotificacion() {
+            _estadoUi.update { it.copy(mensajeNotificacion = null) }
+        }
 
-    fun sincronizarProspectos(mostrarResultado: Boolean = true) {
-        if (_estadoUi.value.estaSincronizando) return
-        _estadoUi.update { it.copy(estaSincronizando = true) }
+        fun sincronizarProspectos(mostrarResultado: Boolean = true) {
+            if (_estadoUi.value.estaSincronizando) return
+            _estadoUi.update { it.copy(estaSincronizando = true) }
 
         viewModelScope.launch {
             val resultado = repositorio.sincronizarProspectos()
